@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Minus, Plus, Trash2, ArrowRight, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowRight, ShoppingBag, ShoppingCart, Shirt } from "lucide-react";
 import { useCartStore } from "@/lib/cart-store";
 import { useToast } from "@/components/ToastProvider";
 import { formatPrice } from "@/lib/format";
@@ -18,21 +18,21 @@ export default function CartClient({ whatsappNumber }: { whatsappNumber: string 
   const totalPrice = useCartStore((s) => s.totalPrice());
   const showToast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  
   const handleQuantity = (productId: string, size: string | null, quantity: number) => {
     const result = updateQuantity(productId, size, quantity);
     showToast(result.message, result.ok ? "success" : "error");
   };
-
+  
   const handleRemove = (productId: string, size: string | null) => {
     removeItem(productId, size);
     showToast("Produit supprimé");
   };
-
+  
   const handleCheckout = async () => {
     if (!items.length) return;
     setIsSubmitting(true);
-
+    
     const result = await createOrder(
       items.map((i) => ({
         productId: i.productId,
@@ -45,23 +45,25 @@ export default function CartClient({ whatsappNumber }: { whatsappNumber: string 
         stock: i.stock,
       }))
     );
-
+    
     const message = buildOrderMessage(items);
     const url = buildWhatsAppUrl(whatsappNumber, message);
-
+    
     if (!result.ok) {
       showToast("La commande n'a pas pu être enregistrée, mais tu peux continuer.", "error");
     }
-
+    
     window.open(url, "_blank");
     clear();
     setIsSubmitting(false);
   };
-
+  
   if (!items.length) {
     return (
       <div className="container-app flex flex-col items-center justify-center gap-4 py-24 text-center">
-        <p className="text-5xl">🛒</p>
+        <p className="flex h-20 w-20 items-center justify-center rounded-full bg-ink-950/[0.04] text-ink-950/30">
+          <ShoppingCart size={32} strokeWidth={1.5} />
+        </p>
         <h1 className="font-display text-xl font-bold">Ton panier est vide</h1>
         <p className="text-sm text-ink-700/70">Découvre notre catalogue de maillots authentiques.</p>
         <Link href="/catalogue" className="btn-primary mt-2">
@@ -70,7 +72,7 @@ export default function CartClient({ whatsappNumber }: { whatsappNumber: string 
       </div>
     );
   }
-
+  
   return (
     <div className="container-app py-8">
       <h1 className="font-display text-2xl font-bold sm:text-3xl">Mon panier</h1>
@@ -86,7 +88,9 @@ export default function CartClient({ whatsappNumber }: { whatsappNumber: string 
                 {item.photo ? (
                   <Image src={item.photo} alt={item.name} fill sizes="80px" className="object-cover" />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-2xl">👕</div>
+                  <div className="flex h-full w-full items-center justify-center text-ink-950/20">
+                    <Shirt size={24} />
+                  </div>
                 )}
               </div>
 

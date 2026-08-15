@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Shirt } from "lucide-react";
 import { deleteProduct } from "@/lib/actions/products";
 import { formatPrice } from "@/lib/format";
 import type { Product } from "@/lib/types";
@@ -12,14 +12,14 @@ import type { Product } from "@/lib/types";
 export default function AdminProductRow({ product }: { product: Product }) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
-
+  
   const handleDelete = async () => {
     if (!confirm(`Supprimer "${product.name}" ?`)) return;
     setDeleting(true);
     await deleteProduct(product.id);
     router.refresh();
   };
-
+  
   return (
     <tr className="border-b border-ink-950/5 text-sm last:border-0">
       <td className="py-3 pr-3">
@@ -28,7 +28,9 @@ export default function AdminProductRow({ product }: { product: Product }) {
             {product.photos?.[0] ? (
               <Image src={product.photos[0]} alt="" fill sizes="44px" className="object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-lg">👕</div>
+              <div className="flex h-full w-full items-center justify-center text-ink-950/20">
+                <Shirt size={18} />
+              </div>
             )}
           </div>
           <div>

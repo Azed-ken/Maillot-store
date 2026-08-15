@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
+import { Shirt } from "lucide-react";
 
 export default function ProductGallery({
   photos,
@@ -13,10 +14,10 @@ export default function ProductGallery({
 }) {
   const [active, setActive] = useState(0);
   const images = photos.length ? photos : [];
-
+  
   return (
     <div>
-      <div className="relative aspect-square overflow-hidden rounded-xl2 bg-ink-800/5">
+      <div className="relative aspect-square overflow-hidden rounded-xl2 border border-ink-950/[0.06] bg-ink-800/[0.03] shadow-card">
         {images.length ? (
           <Image
             src={images[active]}
@@ -27,7 +28,9 @@ export default function ProductGallery({
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-6xl">👕</div>
+          <div className="flex h-full w-full items-center justify-center text-ink-950/15">
+            <Shirt size={96} strokeWidth={1.1} />
+          </div>
         )}
       </div>
 

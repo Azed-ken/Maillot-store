@@ -1,18 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Shirt } from "lucide-react";
 import { formatPrice } from "@/lib/format";
 import { KIND_LABELS, type Product } from "@/lib/types";
 
 export default function ProductCard({ product }: { product: Product }) {
   const photo = product.photos?.[0];
   const outOfStock = product.stock <= 0;
-
+  
   return (
     <Link
       href={`/produit/${product.slug}`}
       className="group block animate-fade-up"
     >
-      <div className="relative aspect-[4/5] overflow-hidden rounded-xl2 bg-ink-800/5">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-xl2 border border-ink-950/[0.06] bg-ink-800/[0.03] shadow-card transition-shadow duration-300 group-hover:shadow-soft">
         {photo ? (
           <Image
             src={photo}
@@ -22,7 +23,9 @@ export default function ProductCard({ product }: { product: Product }) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-4xl">👕</div>
+          <div className="flex h-full w-full items-center justify-center text-ink-950/15">
+            <Shirt size={56} strokeWidth={1.25} />
+          </div>
         )}
 
         <div className="absolute left-3 top-3 flex gap-1.5">
