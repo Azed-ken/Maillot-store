@@ -4,11 +4,11 @@ import clsx from "clsx";
 import type { Category } from "@/lib/types";
 
 export interface CatalogueSearchParams {
-  q?: string;
-  type?: string;
-  kind?: string;
-  category?: string;
-  sort?: string;
+  q ? : string;
+  type ? : string;
+  kind ? : string;
+  category ? : string;
+  sort ? : string;
 }
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
 function buildHref(current: CatalogueSearchParams, patch: CatalogueSearchParams) {
   const params = new URLSearchParams();
   const merged: CatalogueSearchParams = { ...current, ...patch };
-  (Object.entries(merged) as [string, string | undefined][]).forEach(([key, value]) => {
+  (Object.entries(merged) as[string, string | undefined][]).forEach(([key, value]) => {
     if (value) params.set(key, value);
   });
   const qs = params.toString();
@@ -29,9 +29,9 @@ function buildHref(current: CatalogueSearchParams, patch: CatalogueSearchParams)
 export default function CatalogueFilters({ categories, searchParams }: Props) {
   const clubs = categories.filter((c) => c.type === "club");
   const selections = categories.filter((c) => c.type === "selection");
-
+  
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 rounded-xl2 border border-ink-950/[0.06] bg-ink-950/[0.015] p-4 sm:p-5">
       <form action="/catalogue" method="get" className="relative">
         {Object.entries(searchParams).map(([key, value]) =>
           key !== "q" && value ? (
@@ -44,7 +44,7 @@ export default function CatalogueFilters({ categories, searchParams }: Props) {
           name="q"
           defaultValue={searchParams.q || ""}
           placeholder="Rechercher un maillot, un club..."
-          className="input-field pl-10"
+          className="input-field !bg-white pl-10"
         />
       </form>
 
@@ -97,19 +97,19 @@ function FilterPill({
   href: string;
   active: boolean;
   label: string;
-  small?: boolean;
-  nowrap?: boolean;
+  small ? : boolean;
+  nowrap ? : boolean;
 }) {
   return (
     <Link
       href={href}
       className={clsx(
-        "rounded-full border font-medium transition-colors",
+        "rounded-full border font-medium transition-all duration-150 active:scale-90",
         small ? "px-3 py-1 text-xs" : "px-3.5 py-2 text-sm",
         nowrap && "shrink-0",
         active
-          ? "border-ink-950 bg-ink-950 text-white"
-          : "border-ink-950/10 text-ink-700 hover:border-ink-950/30"
+          ? "border-accent bg-accent text-ink-950"
+          : "border-ink-950/10 bg-white text-ink-700 hover:border-ink-950/30"
       )}
     >
       {label}

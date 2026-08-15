@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import clsx from "clsx";
 import { useCartStore } from "@/lib/cart-store";
@@ -10,15 +11,16 @@ import type { Product } from "@/lib/types";
 
 export default function AddToCartPanel({ product }: { product: Product }) {
   const hasSizes = product.sizes.length > 0;
-  const [size, setSize] = useState<string | null>(hasSizes ? product.sizes[0] : null);
+  const [size, setSize] = useState < string | null > (hasSizes ? product.sizes[0] : null);
   const [quantity, setQuantity] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const showToast = useToast();
   const outOfStock = product.stock <= 0;
-
+  
   const decrement = () => setQuantity((q) => Math.max(1, q - 1));
   const increment = () => setQuantity((q) => Math.min(product.stock, q + 1));
-
+  
   const handleAdd = () => {
     const result = addItem({
       productId: product.id,
@@ -31,9 +33,13 @@ export default function AddToCartPanel({ product }: { product: Product }) {
       stock: product.stock,
     });
     showToast(result.message, result.ok ? "success" : "error");
-    if (result.ok) setQuantity(1);
+    if (result.ok) {
+      setQuantity(1);
+      setJustAdded(true);
+      setTimeout(() => setJustAdded(false), 500);
+    }
   };
-
+  
   return (
     <div className="space-y-6">
       <p className="text-2xl font-bold text-ink-950">{formatPrice(product.price)}</p>
@@ -43,9 +49,10 @@ export default function AddToCartPanel({ product }: { product: Product }) {
           <p className="mb-2 text-sm font-semibold text-ink-950">Taille</p>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((s) => (
-              <button
+              <motion.button
                 key={s}
                 onClick={() => setSize(s)}
+                whileTap={{ scale: 0.92 }}
                 className={clsx(
                   "flex h-11 min-w-11 items-center justify-center rounded-xl border px-3 text-sm font-semibold transition-colors",
                   size === s
@@ -54,7 +61,7 @@ export default function AddToCartPanel({ product }: { product: Product }) {
                 )}
               >
                 {s}
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
@@ -84,14 +91,23 @@ export default function AddToCartPanel({ product }: { product: Product }) {
         </p>
       </div>
 
-      <button
+      <motion.button
         onClick={handleAdd}
         disabled={outOfStock}
+        whileTap={{ scale: 0.96 }}
+        animate={justAdded ? { scale: [1, 1.04, 1] } : {}}
+        transition={{ duration: 0.35, ease: "easeOut" }}
         className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-40"
       >
-        <ShoppingBag size={18} />
+        <motion.span
+          animate={justAdded ? { rotate: [0, -20, 12, 0] } : {}}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+          className="flex"
+        >
+          <ShoppingBag size={18} />
+        </motion.span>
         {outOfStock ? "Indisponible" : "Ajouter au panier"}
-      </button>
+      </motion.button>
     </div>
   );
 }

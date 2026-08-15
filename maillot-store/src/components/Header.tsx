@@ -17,7 +17,7 @@ const NAV_LINKS = [
 export default function Header({ settings }: { settings: StoreSettings }) {
   const [open, setOpen] = useState(false);
   const totalItems = useCartStore((s) => s.totalItems());
-
+  
   return (
     <header className="sticky top-0 z-50 border-b border-ink-950/5 bg-white/80 backdrop-blur-md">
       <div className="container-app flex h-16 items-center justify-between">
@@ -56,12 +56,29 @@ export default function Header({ settings }: { settings: StoreSettings }) {
             className="relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-ink-950/5"
             aria-label="Panier"
           >
-            <ShoppingBag size={20} />
-            {totalItems > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold text-ink-950">
-                {totalItems}
-              </span>
-            )}
+            <motion.span
+              key={totalItems > 0 ? "filled" : "empty"}
+              initial={{ scale: 0.85 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              className="flex"
+            >
+              <ShoppingBag size={20} />
+            </motion.span>
+            <AnimatePresence>
+              {totalItems > 0 && (
+                <motion.span
+                  key={totalItems}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: [1.3, 1], opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 14 }}
+                  className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold text-ink-950"
+                >
+                  {totalItems}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </Link>
 
           <button

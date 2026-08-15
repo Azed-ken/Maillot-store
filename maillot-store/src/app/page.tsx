@@ -3,6 +3,8 @@ import { ArrowRight, Home, Plane, Star, Sparkles, Flame } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getStoreSettings } from "@/lib/settings";
 import ProductGrid from "@/components/ProductGrid";
+import HeroBall from "@/components/HeroBall";
+import CategoryTile from "@/components/CategoryTile";
 import type { Product } from "@/lib/types";
 
 export const revalidate = 60;
@@ -82,34 +84,16 @@ export default async function HomePage() {
           </div>
 
           {/* Vignette décorative : évite le grand aplat noir vide sur mobile/desktop */}
-          <div
-            className="animate-fade-up relative mx-auto hidden aspect-square w-full max-w-xs items-center justify-center rounded-full border border-white/10 bg-white/[0.04] sm:flex lg:max-w-sm"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <div className="absolute inset-6 rounded-full border border-dashed border-white/10" />
-            <span className="text-7xl">⚽</span>
-          </div>
+          <HeroBall />
         </div>
       </section>
 
       {/* CATEGORIES RAPIDES */}
       <section className="container-app py-10 sm:py-14">
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
-          {CATEGORY_TILES.map((c) => {
-            const Icon = c.icon;
-            return (
-              <Link
-                key={c.label}
-                href={c.href}
-                className="card-surface group flex flex-col items-center gap-3 py-7 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-soft"
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-accent-dark transition-colors group-hover:bg-accent group-hover:text-ink-950">
-                  <Icon size={20} />
-                </span>
-                <span className="text-sm font-semibold">{c.label}</span>
-              </Link>
-            );
-          })}
+          {CATEGORY_TILES.map((c, i) => (
+            <CategoryTile key={c.label} href={c.href} label={c.label} icon={c.icon} index={i} />
+          ))}
         </div>
       </section>
 
