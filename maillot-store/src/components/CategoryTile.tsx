@@ -2,19 +2,29 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
+import { Home, Plane, Star } from "lucide-react";
+
+const ICONS = {
+  home: Home,
+  plane: Plane,
+  star: Star,
+} as const;
+
+export type CategoryIconKey = keyof typeof ICONS;
 
 export default function CategoryTile({
   href,
   label,
-  icon: Icon,
+  icon,
   index,
 }: {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: CategoryIconKey;
   index: number;
 }) {
+  const Icon = ICONS[icon];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}

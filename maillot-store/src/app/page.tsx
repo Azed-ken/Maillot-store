@@ -1,18 +1,18 @@
 import Link from "next/link";
-import { ArrowRight, Home, Plane, Star, Sparkles, Flame } from "lucide-react";
+import { ArrowRight, Sparkles, Flame } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getStoreSettings } from "@/lib/settings";
 import ProductGrid from "@/components/ProductGrid";
 import HeroBall from "@/components/HeroBall";
-import CategoryTile from "@/components/CategoryTile";
+import CategoryTile, { type CategoryIconKey } from "@/components/CategoryTile";
 import type { Product } from "@/lib/types";
 
 export const revalidate = 60;
 
-const CATEGORY_TILES = [
-  { href: "/catalogue?kind=domicile", label: "Domicile", icon: Home },
-  { href: "/catalogue?kind=exterieur", label: "Extérieur", icon: Plane },
-  { href: "/catalogue?kind=third", label: "Third", icon: Star },
+const CATEGORY_TILES: { href: string;label: string;icon: CategoryIconKey } [] = [
+  { href: "/catalogue?kind=domicile", label: "Domicile", icon: "home" },
+  { href: "/catalogue?kind=exterieur", label: "Extérieur", icon: "plane" },
+  { href: "/catalogue?kind=third", label: "Third", icon: "star" },
 ];
 
 export default async function HomePage() {
